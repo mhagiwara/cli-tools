@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+
+"""
+Command line tool to convert JSONL to TSV.
+By default, this outputs all keys found in the first line as columns.
+You can output a subset of keys by specifying a comma delimited list of keys.
+"""
+
+import csv
+import json
+import sys
+
+
+def main():
+    header = None
+    if len(sys.argv) > 1:
+        header = sys.argv[1].split(',')
+
+    first_line = True
+    writer = csv.writer(sys.stdout, delimiter='\t', quotechar='"')
+    for line in sys.stdin:
+        data = json.loads(line)
+        if header is None:
+            header = sorted(data.keys())
+        if first_line:
+            writer.writerow([unicode(key).encode('utf-8') for key in header])
+
+        values = [data.get(key, '') for key in header]
+        writer.writerow([unicode(val).encode('utf-8') for val in values])
+
+        first_line = False
+
+
+if __name__ == '__main__':
+    main()
