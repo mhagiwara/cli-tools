@@ -23,10 +23,10 @@ def main():
         if header is None:
             header = sorted(data.keys())
         if first_line:
-            writer.writerow([unicode(key).encode('utf-8') for key in header])
+            writer.writerow([key for key in header])
 
         values = [data.get(key, '') for key in header]
-        writer.writerow([unicode(val).encode('utf-8') for val in values])
+        writer.writerow([val for val in values])
 
         first_line = False
 
