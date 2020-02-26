@@ -2,7 +2,8 @@
 
 """
 Command line tool to convert TSV to JSONL (does inverse of jsonl2tsv).
-The input TSV file must have the header line, which is used to determine the names of keys.
+You can specify the name of the keys as the command line parameters.
+Otherwise they will be determined from the header line.
 """
 
 import csv
@@ -12,7 +13,10 @@ import sys
 
 def main():
     reader = csv.reader(sys.stdin, delimiter='\t')
-    header = next(reader)
+    if len(sys.argv) > 1:
+        header = sys.argv[1].split(',')
+    else:
+        header = next(reader)
 
     for row in reader:
         data = dict(zip(header, row))
