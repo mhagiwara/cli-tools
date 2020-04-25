@@ -20,7 +20,7 @@ def main():
 
     for row in reader:
         data = dict(zip(header, row))
-        print(json.dumps(data))
+        print(json.dumps(data, ensure_ascii=False))
 
 
 if __name__ == '__main__':
