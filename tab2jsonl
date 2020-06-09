@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+
+"""
+Command line tool to convert TSV to JSONL (does inverse of jsonl2tsv).
+You can specify the name of the keys as the command line parameters.
+Otherwise they will be determined from the header line.
+"""
+
+import csv
+import json
+import sys
+
+
+def main():
+    if len(sys.argv) > 1:
+        header = sys.argv[1].split(',')
+    else:
+        header = next(sys.stdin)
+
+    for line in sys.stdin:
+        row = line[:-1].split('\t')
+        data = dict(zip(header, row))
+        print(json.dumps(data, ensure_ascii=False))
+
+
+if __name__ == '__main__':
+    main()
