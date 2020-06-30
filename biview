@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+import argparse
+import sys
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--gpt-detokenize', action='store_true')
+    parser.add_argument('--width', type=int, default=100)
+    args = parser.parse_args()
+
+    for line in sys.stdin:
+        fields = line[:-1].split('\t')
+        if len(fields) != 2:
+            print(f'warning: number of fields is not 2: {fields}', file=sys.stderr)
+        src = fields[0]
+        tgt = fields[1]
+
+        if args.gpt_detokenize:
+            src = src.replace(' ', '').replace('Ġ', ' ')
+            tgt = tgt.replace(' ', '').replace('Ġ', ' ')
+        src = src[:args.width]
+        tgt = tgt[:args.width]
+
+        if len(src) < args.width:
+            src += ' ' * (args.width - len(src))
+        
+        if len(tgt) < args.width:
+            tgt += ' ' * (args.width - len(tgt))
+
+        print(f'{src}\t{tgt}')
+
+
+if __name__ == "__main__":
+    main()
