@@ -1,7 +1,22 @@
 #!/usr/bin/env python
 
 import argparse
+import re
 import sys
+
+
+def truncate_at(text, max_width):
+    chars = []
+    width = 0
+    for ch in text:
+        if re.match(r'[ぁ-んァ-ンー\u4e00-\u9FFF]', ch):
+            width += 2
+        else:
+            width += 1
+        chars.append(ch)
+        if width >= max_width:
+            break
+    return ''.join(chars), width
 
 
 def main():
@@ -20,14 +35,14 @@ def main():
         if args.gpt_detokenize:
             src = src.replace(' ', '').replace('Ġ', ' ')
             tgt = tgt.replace(' ', '').replace('Ġ', ' ')
-        src = src[:args.width]
-        tgt = tgt[:args.width]
+        src, src_width = truncate_at(src, args.width)
+        tgt, tgt_width = truncate_at(tgt, args.width)
 
         if len(src) < args.width:
-            src += ' ' * (args.width - len(src))
+            src += ' ' * (args.width - src_width)
         
         if len(tgt) < args.width:
-            tgt += ' ' * (args.width - len(tgt))
+            tgt += ' ' * (args.width - tgt_width)
 
         print(f'{src}\t{tgt}')
 
