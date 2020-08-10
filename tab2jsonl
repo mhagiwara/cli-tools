@@ -15,7 +15,7 @@ def main():
     if len(sys.argv) > 1:
         header = sys.argv[1].split(',')
     else:
-        header = next(sys.stdin)
+        header = next(sys.stdin).split('\t')
 
     for line in sys.stdin:
         row = line[:-1].split('\t')
