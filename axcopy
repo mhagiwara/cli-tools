@@ -18,10 +18,11 @@ url = m.group(0).replace('/pdf/', '/abs/')
 
 req = urllib.request.urlopen('https://' + url)
 body = req.read().decode('utf-8')
-print(body)
 
 m = re.search(r"<meta name=\"citation_author\" content=\"(.+),", body)
 last_name = m.group(1)
 
 year = '20'+url[14:16]
-write_to_clipboard(f"[{last_name} et al., {year}]({'https://'+url})")
+link = f"[{last_name} et al., {year}]({'https://'+url})"
+write_to_clipboard(link)
+print(link)
